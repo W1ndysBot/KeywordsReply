@@ -247,6 +247,21 @@ async def reply_KeywordsReply(websocket, group_id, raw_message, message_id):
         conn.close()
 
 
+# 菜单
+async def menu_KeywordsReply(websocket, group_id, message_id):
+    content = """关键词回复系统菜单
+    
+kron 开启关键词回复
+kroff 关闭关键词回复
+kradd关键词 回复 添加关键词回复
+krrm关键词 删除关键词回复"""
+    await send_group_msg(
+        websocket,
+        group_id,
+        f"[CQ:reply,id={message_id}]{content}",
+    )
+
+
 # 群消息处理函数
 async def handle_KeywordsReply_group_message(websocket, msg):
     # 确保数据目录存在
@@ -260,6 +275,11 @@ async def handle_KeywordsReply_group_message(websocket, msg):
         message_id = str(msg.get("message_id"))
 
         init_KeywordsReply_database()
+
+        # 菜单
+        if raw_message == "keywordsreply":
+            await menu_KeywordsReply(websocket, group_id, message_id)
+            return
 
         # 先处理管理关键词回复
         if await manage_KeywordsReply(
