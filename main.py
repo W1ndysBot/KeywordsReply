@@ -184,7 +184,7 @@ async def manage_KeywordsReply(
                     await send_group_msg(
                         websocket,
                         group_id,
-                        f"[CQ:reply,id={message_id}]关键词回复未开启，请联系管理员使用“krron”开启功能",
+                        f"[CQ:reply,id={message_id}]关键词回复未开启，请联系管理员使用“kron”开启功能",
                     )
             else:
                 await send_group_msg(
@@ -205,7 +205,7 @@ async def manage_KeywordsReply(
                     await send_group_msg(
                         websocket,
                         group_id,
-                        f"[CQ:reply,id={message_id}]关键词回复未开启，请联系管理员使用“krron”开启功能",
+                        f"[CQ:reply,id={message_id}]关键词回复未开启，请联系管理员使用“kron”开启功能",
                     )
             else:
                 await send_group_msg(
