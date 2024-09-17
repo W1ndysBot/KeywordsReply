@@ -47,8 +47,9 @@ def init_KeywordsReply_database():
             """
             CREATE TABLE IF NOT EXISTS keywords (
                 group_id TEXT NOT NULL,
-                keyword TEXT NOT NULL UNIQUE,
-                reply TEXT NOT NULL
+                keyword TEXT NOT NULL,
+                reply TEXT NOT NULL,
+                UNIQUE(group_id, keyword)
             )
         """
         )
