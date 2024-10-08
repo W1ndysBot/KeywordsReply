@@ -1,5 +1,3 @@
-# script/KeywordsReply/main.py
-
 import logging
 import os
 import sys
@@ -12,10 +10,8 @@ sys.path.append(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 )
 
-
 from app.api import *
 from app.switch import load_switch, save_switch
-
 
 DATA_DIR = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -25,16 +21,13 @@ DATA_DIR = os.path.join(
 
 DB_PATH = os.path.join(DATA_DIR, "keywords.db")
 
-
 # 查看功能开关状态
 def load_KeywordsReply(group_id):
     return load_switch(group_id, "关键词回复")
 
-
 # 保存功能开关状态
 def save_KeywordsReply(group_id, status):
     save_switch(group_id, "关键词回复", status)
-
 
 # 初始化关键词数据库
 def init_KeywordsReply_database():
@@ -57,7 +50,6 @@ def init_KeywordsReply_database():
         conn.commit()
         conn.close()
         logging.info(f"初始化关键词数据库成功")
-
 
 # 添加关键词回复
 async def add_KeywordsReply(websocket, group_id, raw_message, message_id):
@@ -90,7 +82,6 @@ async def add_KeywordsReply(websocket, group_id, raw_message, message_id):
             finally:
                 conn.close()
 
-
 # 删除关键词回复
 async def remove_KeywordsReply(websocket, group_id, raw_message, message_id):
     match = re.match(r"krrm(.*)", raw_message)
@@ -119,7 +110,6 @@ async def remove_KeywordsReply(websocket, group_id, raw_message, message_id):
             )
         finally:
             conn.close()
-
 
 # 管理关键词回复
 async def manage_KeywordsReply(
@@ -220,7 +210,6 @@ async def manage_KeywordsReply(
         logging.error(f"管理关键词回复失败: {e}")
         return
 
-
 # 关键词回复
 async def reply_KeywordsReply(websocket, group_id, raw_message, message_id):
     conn = sqlite3.connect(DB_PATH)
@@ -235,6 +224,8 @@ async def reply_KeywordsReply(websocket, group_id, raw_message, message_id):
         if keywords:
             _, keyword, reply = keywords
             if keyword == raw_message:
+                # 将返回中的转义字符转换回去
+                reply = reply.replace("&#91;", "[").replace("&#93;", "]").replace("\\n", "\n")
                 reply_message = f"[CQ:reply,id={message_id}]{reply}"
                 await send_group_msg(
                     websocket,
@@ -246,7 +237,6 @@ async def reply_KeywordsReply(websocket, group_id, raw_message, message_id):
         logging.error(f"关键词回复失败: {e}")
     finally:
         conn.close()
-
 
 # 菜单
 async def menu_KeywordsReply(websocket, group_id, message_id):
@@ -261,7 +251,6 @@ krrm关键词 删除关键词回复"""
         group_id,
         f"[CQ:reply,id={message_id}]{content}",
     )
-
 
 # 群消息处理函数
 async def handle_KeywordsReply_group_message(websocket, msg):
