@@ -65,7 +65,9 @@ async def add_KeywordsReply(websocket, group_id, raw_message, message_id):
         match = re.match(r"kradd(.*?)\s+(.*)", raw_message)
         if match:
             keyword = match.group(1).strip()
-            reply = match.group(2)
+
+            # 将cq码中的&#91;和&#93;替换为[]
+            reply = match.group(2).replace("&#91;", "[").replace("&#93;", "]")
 
             conn = sqlite3.connect(DB_PATH)
             cursor = conn.cursor()
@@ -235,7 +237,8 @@ async def reply_KeywordsReply(websocket, group_id, raw_message, message_id):
         if keywords:
             _, keyword, reply = keywords
             if keyword == raw_message:
-                reply_message = f"[CQ:reply,id={message_id}]{reply}"
+                reply_message = reply.replace("&#91;", "[").replace("&#93;", "]")
+                reply_message = f"[CQ:reply,id={message_id}]{reply_message}"
                 await send_group_msg(
                     websocket,
                     group_id,
