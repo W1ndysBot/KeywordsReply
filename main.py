@@ -77,7 +77,7 @@ async def add_KeywordsReply(websocket, group_id, raw_message, message_id):
                 await send_group_msg(
                     websocket,
                     group_id,
-                    f"[CQ:reply,id={message_id}]关键词回复已更新\n关键词:{keyword}\n回复:{reply}",
+                    f"[CQ:reply,id={message_id}]关键词回复已更新\n关键词：{keyword}\n回复：{reply}",
                 )
             except Exception as e:
                 await send_group_msg(
