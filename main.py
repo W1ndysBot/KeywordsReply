@@ -304,8 +304,6 @@ async def handle_events(websocket, msg):
         if msg.get("status") == "ok":
             return
 
-        post_type = msg.get("post_type")
-
         # 处理元事件
         if post_type == "meta_event":
             return
@@ -314,14 +312,7 @@ async def handle_events(websocket, msg):
         elif post_type == "message":
             message_type = msg.get("message_type")
             if message_type == "group":
-                group_id = str(msg.get("group_id", ""))
-                message_id = str(msg.get("message_id", ""))
-                raw_message = str(msg.get("raw_message", ""))
-                user_id = str(msg.get("user_id", ""))
-
-                # 处理关键词回复相关命令
-                if raw_message.startswith("kr") or raw_message == "keywordsreply":
-                    await handle_KeywordsReply_group_message(websocket, msg)
+                await handle_KeywordsReply_group_message(websocket, msg)
             elif message_type == "private":
                 return
 
